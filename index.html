@@ -284,61 +284,204 @@
     100%{ transform: translateY(-110vh) scale(1.2); opacity:0; }
   }
 
-  /* Music player */
-  .music-player{
-    position:fixed; bottom:20px; right:20px; z-index:50;
-  }
-  @media (max-width: 640px){
-    .music-player{ bottom:14px; right:14px; }
-  }
-  .music-btn{
-    width:56px; height:56px; border-radius:50%;
-    background: linear-gradient(135deg, rgba(26,31,75,0.8), rgba(10,14,39,0.9));
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(245,240,232,0.15);
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer;
-    transition: all .4s;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 30px rgba(120,140,220,0.2);
-  }
-  .music-btn:hover{
-    transform: scale(1.08);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.7), 0 0 50px rgba(180,200,255,0.3);
-  }
-  .music-btn.playing .disc{ animation: spin 4s linear infinite; }
-  @keyframes spin{ to{ transform: rotate(360deg); } }
-  .disc{
-    width:30px; height:30px; border-radius:50%;
-    background: radial-gradient(circle, #000 30%, #1a1f4b 60%, #0a0e27);
-    border: 1px solid rgba(245,240,232,0.3);
-    position:relative;
-  }
-  .disc::before{
-    content:''; position:absolute; inset: 45%; border-radius:50%;
-    background:#f5f0e8;
-  }
-  .music-expand{
-    position:absolute; bottom:70px; right:0;
-    width: 240px; padding: 14px; border-radius:14px;
-    transform: translateY(10px) scale(.95); opacity:0; pointer-events:none;
-    transition: all .3s;
-  }
-  .music-player.open .music-expand{ transform: translateY(0) scale(1); opacity:1; pointer-events:auto; }
-  .wave{ display:flex; gap:3px; align-items:flex-end; height:20px; }
-  .wave span{
-    width:3px; background: linear-gradient(180deg, #f5f0e8, #4a5ac0); border-radius:2px;
-    animation: wave 1s ease-in-out infinite;
-  }
-  .wave.paused span{ animation-play-state: paused; opacity:.3; }
-  .wave span:nth-child(1){ animation-delay:-.4s; height:60%; }
-  .wave span:nth-child(2){ animation-delay:-.2s; height:100%; }
-  .wave span:nth-child(3){ animation-delay:-.6s; height:40%; }
-  .wave span:nth-child(4){ animation-delay:-.3s; height:80%; }
-  .wave span:nth-child(5){ animation-delay:-.5s; height:50%; }
-  @keyframes wave{
-    0%,100%{ transform: scaleY(.4); }
-    50%{ transform: scaleY(1); }
-  }
+/* ===== NEW MUSIC PLAYER UI ===== */
+.music-player{
+  position:fixed; bottom:24px; right:24px; z-index:50;
+  font-family:'Inter', sans-serif;
+}
+@media (max-width: 640px){
+  .music-player{ bottom:16px; right:16px; }
+}
+
+/* Main toggle button */
+.music-toggle{
+  display:flex; align-items:center; gap:12px;
+  padding:10px 18px 10px 12px;
+  background: linear-gradient(135deg, rgba(26,31,75,0.85), rgba(10,14,39,0.95));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(245,240,232,0.15);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all .4s cubic-bezier(.2,.8,.2,1);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(120,140,220,0.2);
+  user-select: none;
+}
+.music-toggle:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 15px 50px rgba(0,0,0,0.7), 0 0 50px rgba(180,200,255,0.3);
+  border-color: rgba(245,240,232,0.3);
+}
+.music-toggle:active{ transform: translateY(-1px); }
+
+/* Play icon circle */
+.music-icon{
+  width:42px; height:42px; border-radius:50%;
+  background: linear-gradient(135deg, #f5f0e8, #d4c9b8);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(245,240,232,0.3);
+  transition: transform .3s;
+}
+.music-toggle:hover .music-icon{ transform: scale(1.08); }
+.music-icon svg{ width:18px; height:18px; fill:#1a1f4b; }
+
+/* Text label */
+.music-label{
+  display:flex; flex-direction:column; gap:2px;
+  min-width: 0;
+}
+.music-title{
+  font-family:'Cormorant Garamond', serif;
+  font-size: 0.95rem;
+  color: #f5f0e8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.02em;
+}
+.music-subtitle{
+  font-size: 0.65rem;
+  color: rgba(245,240,232,0.5);
+  display:flex; align-items:center; gap:6px;
+  letter-spacing: 0.05em;
+}
+
+/* Equalizer bars inline */
+.eq-bars{
+  display:flex; gap:2px; align-items:flex-end; height:10px;
+}
+.eq-bars span{
+  width:2px; background: rgba(245,240,232,0.7); border-radius:1px;
+  animation: eqBounce 1s ease-in-out infinite;
+}
+.eq-bars.paused span{ animation-play-state: paused; opacity:0.3; height:3px !important; }
+.eq-bars span:nth-child(1){ animation-delay:-.4s; height:40%; }
+.eq-bars span:nth-child(2){ animation-delay:-.2s; height:100%; }
+.eq-bars span:nth-child(3){ animation-delay:-.6s; height:60%; }
+.eq-bars span:nth-child(4){ animation-delay:-.3s; height:80%; }
+@keyframes eqBounce{
+  0%,100%{ transform: scaleY(.4); }
+  50%{ transform: scaleY(1); }
+}
+
+/* Expanded panel */
+.music-panel{
+  position:absolute; bottom:75px; right:0;
+  width: 280px; padding: 16px; border-radius:18px;
+  background: linear-gradient(135deg, rgba(26,31,75,0.92), rgba(10,14,39,0.96));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(245,240,232,0.12);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  transform: translateY(10px) scale(.95); opacity:0; pointer-events:none;
+  transition: all .35s cubic-bezier(.2,.8,.2,1);
+}
+.music-player.open .music-panel{ 
+  transform: translateY(0) scale(1); opacity:1; pointer-events:auto; 
+}
+
+/* Panel album art */
+.album-art{
+  width:100%; aspect-ratio: 1;
+  background: linear-gradient(135deg, #1a1f4b, #0a0e27);
+  border-radius: 12px;
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom: 14px;
+  position:relative; overflow:hidden;
+  border: 1px solid rgba(245,240,232,0.1);
+}
+.album-art::before{
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(circle at 30% 20%, rgba(180,200,255,0.25), transparent 60%),
+              radial-gradient(circle at 70% 80%, rgba(212,184,140,0.15), transparent 60%);
+}
+.album-art .vinyl{
+  width: 60%; aspect-ratio: 1; border-radius:50%;
+  background: radial-gradient(circle, #000 25%, #1a1f4b 50%, #0a0e27);
+  border: 2px solid rgba(245,240,232,0.2);
+  position:relative; display:flex; align-items:center; justify-content:center;
+}
+.album-art .vinyl::before{
+  content:''; width:30%; aspect-ratio: 1; border-radius:50%;
+  background: radial-gradient(circle, #f5f0e8, #d4b88c);
+  box-shadow: 0 0 20px rgba(245,240,232,0.4);
+}
+.music-player.playing .album-art .vinyl{
+  animation: spinDisc 4s linear infinite;
+}
+@keyframes spinDisc{ to{ transform: rotate(360deg); } }
+
+/* Panel info */
+.panel-title{
+  font-family:'Cormorant Garamond', serif;
+  font-size: 1.2rem; color: #f5f0e8;
+  text-align:center; margin-bottom: 4px;
+}
+.panel-subtitle{
+  font-size: 0.7rem; color: rgba(245,240,232,0.5);
+  text-align:center; letter-spacing: 0.1em;
+  margin-bottom: 14px;
+}
+
+/* Panel wave */
+.panel-wave{ display:flex; gap:3px; align-items:flex-end; justify-content:center; height:24px; margin-bottom:14px; }
+.panel-wave span{
+  width:3px; background: linear-gradient(180deg, #f5f0e8, #4a5ac0); border-radius:2px;
+  animation: wave 1s ease-in-out infinite;
+}
+.panel-wave.paused span{ animation-play-state: paused; opacity:.3; }
+.panel-wave span:nth-child(1){ animation-delay:-.4s; height:60%; }
+.panel-wave span:nth-child(2){ animation-delay:-.2s; height:100%; }
+.panel-wave span:nth-child(3){ animation-delay:-.6s; height:40%; }
+.panel-wave span:nth-child(4){ animation-delay:-.3s; height:80%; }
+.panel-wave span:nth-child(5){ animation-delay:-.5s; height:50%; }
+.panel-wave span:nth-child(6){ animation-delay:-.7s; height:70%; }
+.panel-wave span:nth-child(7){ animation-delay:-.1s; height:50%; }
+@keyframes wave{
+  0%,100%{ transform: scaleY(.4); }
+  50%{ transform: scaleY(1); }
+}
+
+/* Panel button */
+.panel-btn{
+  width:100%; padding: 12px;
+  background: linear-gradient(135deg, rgba(245,240,232,0.1), rgba(245,240,232,0.05));
+  border: 1px solid rgba(245,240,232,0.2);
+  border-radius: 12px;
+  color: #f5f0e8;
+  font-family:'Inter', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  transition: all .3s;
+}
+.panel-btn:hover{
+  background: linear-gradient(135deg, rgba(245,240,232,0.15), rgba(245,240,232,0.08));
+  border-color: rgba(245,240,232,0.4);
+  transform: translateY(-2px);
+}
+.panel-btn svg{ width:14px; height:14px; fill:#f5f0e8; }
+
+/* Volume slider */
+.volume-wrap{
+  display:flex; align-items:center; gap:8px; margin-top:12px;
+  padding: 0 4px;
+}
+.volume-wrap svg{ width:14px; height:14px; fill: rgba(245,240,232,0.6); flex-shrink:0; }
+.volume-slider{
+  flex:1; -webkit-appearance: none; appearance: none;
+  height: 3px; background: rgba(245,240,232,0.15);
+  border-radius: 3px; outline: none;
+}
+.volume-slider::-webkit-slider-thumb{
+  -webkit-appearance: none; appearance: none;
+  width: 12px; height: 12px; border-radius:50%;
+  background: #f5f0e8; cursor: pointer;
+  box-shadow: 0 0 10px rgba(245,240,232,0.5);
+}
 
   /* Parallax wrapper */
   .parallax-wrap{ transition: transform .2s ease-out; }
@@ -1023,21 +1166,44 @@
 
 <!-- Music player -->
 <div class="music-player" id="musicPlayer">
-  <div class="music-expand glass-strong rounded-2xl">
-    <div class="flex items-center gap-3 mb-3">
-      <div class="wave paused" id="wave"><span></span><span></span><span></span><span></span><span></span></div>
-      <div class="flex-1 min-w-0">
-        <p class="text-sm font-serif-lux truncate">Risk Is All</p>
-        <p class="text-[0.65rem] text-[#f5f0e8]/50 truncate">for Isan 🤍</p>
-      </div>
+  <!-- Expanded Panel -->
+  <div class="music-panel">
+    <div class="album-art">
+      <div class="vinyl"></div>
     </div>
-    <div class="flex items-center gap-2">
-      <button class="music-ctrl-btn flex-1 btn-lux rounded-full py-2 text-xs tracking-widest cursor-pointer" id="playPauseBtn">PLAY</button>
+    <p class="panel-title">Risk Is All</p>
+    <p class="panel-subtitle">BRUNO MARS · FOR ISAN </p>
+    
+    <div class="panel-wave paused" id="panelWave">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span>
     </div>
-    <p class="text-[0.6rem] text-[#f5f0e8]/40 mt-3 text-center">♪ background music</p>
+    
+    <button class="panel-btn" id="panelPlayBtn">
+      <svg id="panelIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <span id="panelBtnText">PLAY</span>
+    </button>
+    
+    <div class="volume-wrap">
+      <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 8.5v7a4.49 4.49 0 002.5-3.5zM14 3.23v2.06a7 7 0 010 13.42v2.06A9 9 0 0014 3.23z"/></svg>
+      <input type="range" min="0" max="100" value="50" class="volume-slider" id="volumeSlider">
+    </div>
   </div>
-  <div class="music-btn" id="musicToggle">
-    <div class="disc" id="disc"></div>
+
+  <!-- Main Toggle Button -->
+  <div class="music-toggle" id="musicToggle">
+    <div class="music-icon">
+      <svg id="mainIcon" viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1014 17V7h4V3h-6z"/></svg>
+    </div>
+    <div class="music-label">
+      <span class="music-title">Risk Is All</span>
+      <span class="music-subtitle">
+        <span class="eq-bars paused" id="mainEq">
+          <span></span><span></span><span></span><span></span>
+        </span>
+        <span>TAP TO PLAY</span>
+      </span>
+    </div>
   </div>
 </div>
 
@@ -1212,7 +1378,7 @@
       const centerY = rect.top + rect.height / 2;
       createExplosion(centerX, centerY);
     }
-    
+
 /* ========================================================
    STARFIELD
 ======================================================== */
@@ -1322,6 +1488,21 @@ document.getElementById('openMsgBtn').addEventListener('click', function(e){
   createRipple(e, this);
   const welcome = document.getElementById('welcomeScreen');
   const main = document.getElementById('mainContent');
+  
+  // Auto-play music saat "Buka Pesan" diklik
+  const audio = document.getElementById('bgAudio');
+  const wave = document.getElementById('wave');
+  const disc = document.getElementById('disc');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const musicToggle = document.getElementById('musicToggle');
+  
+  audio.volume = 0.5;
+  audio.play().then(()=>{
+    wave.classList.remove('paused');
+    disc.parentElement.classList.add('playing');
+    playPauseBtn.textContent = 'PAUSE';
+  }).catch(err => console.log('Audio autoplay blocked:', err));
+  
   welcome.classList.add('hidden-screen');
   setTimeout(()=>{
     main.classList.remove('hidden-screen');
@@ -1525,38 +1706,67 @@ document.querySelectorAll('.polaroid').forEach(pol=>{
 });
 
 /* ========================================================
-   MUSIC PLAYER
+   MUSIC PLAYER (NEW UI)
 ======================================================== */
 const musicPlayer = document.getElementById('musicPlayer');
 const musicToggle = document.getElementById('musicToggle');
-const playPauseBtn = document.getElementById('playPauseBtn');
-const wave = document.getElementById('wave');
-const disc = document.getElementById('disc');
+const panelPlayBtn = document.getElementById('panelPlayBtn');
+const panelWave = document.getElementById('panelWave');
+const mainEq = document.getElementById('mainEq');
+const panelBtnText = document.getElementById('panelBtnText');
+const panelIcon = document.getElementById('panelIcon');
+const volumeSlider = document.getElementById('volumeSlider');
 const audio = document.getElementById('bgAudio');
-audio.volume = 0.4;
 
+const SVG_PLAY = '<path d="M8 5v14l11-7z"/>';
+const SVG_PAUSE = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+
+audio.volume = 0.5;
+
+// Toggle panel
 musicToggle.addEventListener('click', ()=>{
   musicPlayer.classList.toggle('open');
 });
 
-playPauseBtn.addEventListener('click', (e)=>{
-  createRipple(e, playPauseBtn);
+// Main play function
+function togglePlay(){
   if(audio.paused){
     audio.play().then(()=>{
-      wave.classList.remove('paused');
-      musicToggle.classList.add('playing');
-      playPauseBtn.textContent = 'PAUSE';
+      setPlayingState(true);
     }).catch(()=>{
-      playPauseBtn.textContent = 'NO AUDIO';
-      setTimeout(()=> playPauseBtn.textContent = 'PLAY', 1500);
+      panelBtnText.textContent = 'BLOCKED';
+      setTimeout(()=> setPlayingState(false), 1500);
     });
   } else {
     audio.pause();
-    wave.classList.add('paused');
-    musicToggle.classList.remove('playing');
-    playPauseBtn.textContent = 'PLAY';
+    setPlayingState(false);
   }
+}
+
+function setPlayingState(playing){
+  if(playing){
+    panelWave.classList.remove('paused');
+    mainEq.classList.remove('paused');
+    musicPlayer.classList.add('playing');
+    panelBtnText.textContent = 'PAUSE';
+    panelIcon.innerHTML = SVG_PAUSE;
+  } else {
+    panelWave.classList.add('paused');
+    mainEq.classList.add('paused');
+    musicPlayer.classList.remove('playing');
+    panelBtnText.textContent = 'PLAY';
+    panelIcon.innerHTML = SVG_PLAY;
+  }
+}
+
+panelPlayBtn.addEventListener('click', togglePlay);
+
+// Volume slider
+volumeSlider.addEventListener('input', (e)=>{
+  audio.volume = e.target.value / 100;
 });
+
+// Auto-play saat welcome button diklik (sudah di-handle di WELCOME -> MAIN TRANSITION)
 
 /* ========================================================
    SMOOTH SCROLL POLYFILL (native is fine, but ensure nice)
