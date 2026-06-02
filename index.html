@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Untuk Isan 🤍</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#000000;
+    --bg-1:#060918;
+    --bg-2:#0a0e27;
+    --deep:#1a1f4b;
+    --blue:#2c3a8c;
+    --accent:#f5f0e8;
+    --gold:#d4b88c;
+  }
+  *{ -webkit-tap-highlight-color: transparent; }
+  html,body{ background:#000; color:var(--accent); font-family:'Inter',sans-serif; overflow-x:hidden; }
+  body::-webkit-scrollbar{ width:6px; }
+  body::-webkit-scrollbar-track{ background:#000; }
+  body::-webkit-scrollbar-thumb{ background:linear-gradient(var(--blue),var(--deep)); border-radius:10px; }
+
+  .font-serif-lux{ font-family:'Cormorant Garamond', serif; }
+  .font-script{ font-family:'Great Vibes', cursive; }
+
+  /* Starfield canvas */
+  #starCanvas{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+  /* Ambient gradient orbs */
+  .orb{
+    position:fixed; border-radius:9999px; filter: blur(80px); opacity:.35; pointer-events:none; z-index:0;
+    animation: orbFloat 18s ease-in-out infinite;
+  }
+  .orb-1{ width:500px; height:500px; background:radial-gradient(circle,#2c3a8c,transparent 70%); top:-100px; left:-100px; }
+  .orb-2{ width:600px; height:600px; background:radial-gradient(circle,#4a3a8c,transparent 70%); bottom:-200px; right:-150px; animation-delay:-6s; }
+  .orb-3{ width:400px; height:400px; background:radial-gradient(circle,#1a2a6c,transparent 70%); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:-12s; }
+  @keyframes orbFloat{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    33%{ transform:translate(40px,-30px) scale(1.1); }
+    66%{ transform:translate(-30px,40px) scale(.95); }
+  }
+
+  /* Glass */
+  .glass{
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .glass-strong{
+    background: linear-gradient(135deg, rgba(26,31,75,0.5), rgba(10,14,39,0.6));
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  /* Reveal animations */
+  .reveal{ opacity:0; transform: translateY(40px); transition: opacity 1s ease, transform 1s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in{ opacity:1; transform: translateY(0); }
+  .reveal-pop{ opacity:0; transform: scale(.85); transition: opacity .9s ease, transform .9s cubic-bezier(.2,1.4,.4,1); }
+  .reveal-pop.in{ opacity:1; transform: scale(1); }
+  .reveal-left{ opacity:0; transform: translateX(-60px); transition: opacity 1s ease, transform 1s cubic-bezier(.2,.8,.2,1); }
+  .reveal-left.in{ opacity:1; transform: translateX(0); }
+  .reveal-right{ opacity:0; transform: translateX(60px); transition: opacity 1s ease, transform 1s cubic-bezier(.2,.8,.2,1); }
+  .reveal-right.in{ opacity:1; transform: translateX(0); }
+
+  /* Floating */
+  @keyframes floatSlow{
+    0%,100%{ transform: translateY(0px); }
+    50%{ transform: translateY(-14px); }
+  }
+  .float-slow{ animation: floatSlow 6s ease-in-out infinite; }
+  .float-slow-2{ animation: floatSlow 7s ease-in-out infinite; animation-delay:-2s; }
+  .float-slow-3{ animation: floatSlow 8s ease-in-out infinite; animation-delay:-4s; }
+
+  /* Glow text */
+  .glow-text{
+    text-shadow:
+      0 0 10px rgba(245,240,232,0.4),
+      0 0 30px rgba(180,200,255,0.25),
+      0 0 60px rgba(120,140,220,0.15);
+  }
+  .glow-soft{
+    text-shadow: 0 0 20px rgba(245,240,232,0.3);
+  }
+
+  /* Typing caret */
+  .caret::after{
+    content:'|'; margin-left:2px; animation: blink 1s infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  /* Loading */
+  .progress-bar{
+    height:2px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden; position:relative;
+  }
+  .progress-fill{
+    height:100%; width:0%; background: linear-gradient(90deg, transparent, #f5f0e8, transparent);
+    box-shadow: 0 0 12px rgba(245,240,232,.6);
+    transition: width .3s ease;
+  }
+  @keyframes loadPulse{
+    0%,100%{ opacity:.5; transform:scale(1); }
+    50%{ opacity:1; transform:scale(1.05); }
+  }
+  .load-pulse{ animation: loadPulse 2.5s ease-in-out infinite; }
+
+  /* Button */
+  .btn-lux{
+    position:relative; overflow:hidden;
+    background: linear-gradient(135deg, rgba(245,240,232,0.08), rgba(245,240,232,0.02));
+    border: 1px solid rgba(245,240,232,0.2);
+    transition: all .4s ease;
+  }
+  .btn-lux:hover{
+    border-color: rgba(245,240,232,0.5);
+    box-shadow: 0 0 30px rgba(245,240,232,0.15), inset 0 0 20px rgba(245,240,232,0.05);
+    transform: translateY(-2px);
+  }
+  .ripple{
+    position:absolute; border-radius:50%; transform:scale(0);
+    background: radial-gradient(circle, rgba(245,240,232,0.4), transparent 70%);
+    animation: rippleAnim .8s ease-out;
+    pointer-events:none;
+  }
+  @keyframes rippleAnim{
+    to{ transform: scale(4); opacity:0; }
+  }
+
+  /* Timeline */
+  .timeline-line{
+    position:absolute; top:0; bottom:0; left:50%; width:1px;
+    background: linear-gradient(180deg, transparent, rgba(245,240,232,0.3), transparent);
+    transform: translateX(-50%);
+  }
+  @media (max-width: 768px){
+    .timeline-line{ left: 24px; }
+  }
+  .timeline-dot{
+    position:absolute; left:50%; top:30px; width:14px; height:14px;
+    border-radius:50%; transform: translateX(-50%);
+    background: radial-gradient(circle, #f5f0e8, transparent 70%);
+    box-shadow: 0 0 20px rgba(245,240,232,0.6);
+  }
+  .timeline-dot::before{
+    content:''; position:absolute; inset:3px; border-radius:50%;
+    background:#0a0e27; border:1px solid rgba(245,240,232,0.6);
+  }
+  @media (max-width: 768px){
+    .timeline-dot{ left:24px; }
+  }
+
+  /* Polaroid */
+  .polaroid{
+    background: #f5f0e8;
+    padding: 14px 14px 56px 14px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 40px rgba(180,200,255,0.1);
+    transition: transform .5s cubic-bezier(.2,1.4,.4,1), box-shadow .5s;
+    position:relative;
+  }
+  .polaroid:hover{
+    transform: scale(1.04) rotate(0deg) !important;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.8), 0 0 60px rgba(180,200,255,0.2);
+    z-index: 10;
+  }
+  .polaroid-img{
+    background: linear-gradient(135deg, #1a1f4b, #0a0e27);
+    width:100%; aspect-ratio: 1/1;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden; position:relative;
+  }
+  .polaroid-img::before{
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(circle at 30% 20%, rgba(180,200,255,0.2), transparent 60%),
+                radial-gradient(circle at 70% 80%, rgba(212,184,140,0.15), transparent 60%);
+  }
+  .polaroid-caption{
+    position:absolute; bottom: 14px; left:0; right:0; text-align:center;
+    font-family:'Great Vibes', cursive; color:#1a1f4b; font-size:1.3rem;
+  }
+  .polaroid-img img{
+  transition: transform .8s cubic-bezier(.2,.8,.2,1), filter .8s;
+  filter: saturate(0.9) contrast(1.05);
+}
+.polaroid:hover .polaroid-img img{
+  transform: scale(1.08);
+  filter: saturate(1.1) contrast(1.1);
+}
+
+/* Fix: tampilkan foto di polaroid */
+.polaroid-img img{
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Fix lightbox foto */
+.lightbox .polaroid-img::before{
+  display: none !important;
+}
+.lightbox .polaroid-img img{
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+  /* Envelope */
+  .envelope-wrap{ perspective: 1500px; }
+  .envelope{
+    width: 320px; height: 220px; max-width:90vw;
+    position: relative; transform-style: preserve-3d;
+    transition: transform 1s ease;
+  }
+  .envelope-body{
+    position:absolute; inset:0;
+    background: linear-gradient(135deg, #1a1f4b, #0a0e27);
+    border: 1px solid rgba(245,240,232,0.15);
+    border-radius: 6px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(120,140,220,0.15);
+  }
+  .envelope-flap{
+    position:absolute; top:0; left:0; right:0; height:110px;
+    background: linear-gradient(180deg, #1a1f4b, #151a3f);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform 1.2s cubic-bezier(.2,.8,.2,1);
+    z-index: 3;
+    border-top-left-radius:6px; border-top-right-radius:6px;
+  }
+  .envelope.open .envelope-flap{ transform: rotateX(180deg); z-index: 1; }
+  .envelope-front{
+    position:absolute; inset:0;
+    background: linear-gradient(180deg, transparent 0%, transparent 48%, rgba(245,240,232,0.08) 48%, rgba(245,240,232,0.04) 100%);
+    clip-path: polygon(0 48%, 50% 90%, 100% 48%, 100% 100%, 0 100%);
+    z-index: 4;
+  }
+  .letter{
+    position:absolute; top:10px; left:10px; right:10px; bottom:30px;
+    background: linear-gradient(135deg, #f5f0e8, #e8dfd0);
+    border-radius: 4px;
+    color:#1a1f4b;
+    padding: 18px;
+    font-family:'Cormorant Garamond', serif;
+    font-size: 0.72rem; line-height:1.4;
+    overflow:auto;
+    transform: translateY(0);
+    transition: transform 1.2s cubic-bezier(.2,.8,.2,1) .3s;
+    z-index:2;
+  }
+  .envelope.open .letter{
+    transform: translateY(-240px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  }
+  .wax-seal{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:46px; height:46px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #8b3a3a, #5a1f1f);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,120,120,0.3);
+    z-index:5; display:flex; align-items:center; justify-content:center;
+    transition: opacity .5s;
+    font-family:'Great Vibes'; color:#f5f0e8; font-size:1.3rem;
+  }
+  .envelope.open .wax-seal{ opacity:0; }
+
+  /* Hearts floating */
+  .heart-float{
+    position:fixed; bottom:-30px; color: rgba(245,240,232,0.5);
+    font-size: 1rem; pointer-events:none; z-index:2;
+    animation: heartRise linear forwards;
+  }
+  @keyframes heartRise{
+    0%{ transform: translateY(0) scale(.6); opacity:0; }
+    10%{ opacity:.7; }
+    90%{ opacity:.5; }
+    100%{ transform: translateY(-110vh) scale(1.2); opacity:0; }
+  }
+
+  /* Music player */
+  .music-player{
+    position:fixed; bottom:20px; right:20px; z-index:50;
+  }
+  @media (max-width: 640px){
+    .music-player{ bottom:14px; right:14px; }
+  }
+  .music-btn{
+    width:56px; height:56px; border-radius:50%;
+    background: linear-gradient(135deg, rgba(26,31,75,0.8), rgba(10,14,39,0.9));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(245,240,232,0.15);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition: all .4s;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 30px rgba(120,140,220,0.2);
+  }
+  .music-btn:hover{
+    transform: scale(1.08);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.7), 0 0 50px rgba(180,200,255,0.3);
+  }
+  .music-btn.playing .disc{ animation: spin 4s linear infinite; }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  .disc{
+    width:30px; height:30px; border-radius:50%;
+    background: radial-gradient(circle, #000 30%, #1a1f4b 60%, #0a0e27);
+    border: 1px solid rgba(245,240,232,0.3);
+    position:relative;
+  }
+  .disc::before{
+    content:''; position:absolute; inset: 45%; border-radius:50%;
+    background:#f5f0e8;
+  }
+  .music-expand{
+    position:absolute; bottom:70px; right:0;
+    width: 240px; padding: 14px; border-radius:14px;
+    transform: translateY(10px) scale(.95); opacity:0; pointer-events:none;
+    transition: all .3s;
+  }
+  .music-player.open .music-expand{ transform: translateY(0) scale(1); opacity:1; pointer-events:auto; }
+  .wave{ display:flex; gap:3px; align-items:flex-end; height:20px; }
+  .wave span{
+    width:3px; background: linear-gradient(180deg, #f5f0e8, #4a5ac0); border-radius:2px;
+    animation: wave 1s ease-in-out infinite;
+  }
+  .wave.paused span{ animation-play-state: paused; opacity:.3; }
+  .wave span:nth-child(1){ animation-delay:-.4s; height:60%; }
+  .wave span:nth-child(2){ animation-delay:-.2s; height:100%; }
+  .wave span:nth-child(3){ animation-delay:-.6s; height:40%; }
+  .wave span:nth-child(4){ animation-delay:-.3s; height:80%; }
+  .wave span:nth-child(5){ animation-delay:-.5s; height:50%; }
+  @keyframes wave{
+    0%,100%{ transform: scaleY(.4); }
+    50%{ transform: scaleY(1); }
+  }
+
+  /* Parallax wrapper */
+  .parallax-wrap{ transition: transform .2s ease-out; }
+
+  /* Letter scroll in envelope modal */
+  .letter-modal{
+    position:fixed; inset:0; z-index:40; display:flex; align-items:center; justify-content:center;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
+    opacity:0; pointer-events:none; transition: opacity .5s;
+    padding: 20px;
+  }
+  .letter-modal.open{ opacity:1; pointer-events:auto; }
+  .letter-paper{
+    width: min(560px, 92vw); max-height: 82vh; overflow-y:auto;
+    background: linear-gradient(135deg, #f5f0e8, #e8dfd0);
+    color:#1a1f4b; padding: 36px 32px;
+    border-radius: 8px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 100px rgba(180,200,255,0.1);
+    font-family:'Cormorant Garamond', serif; font-size: 1.05rem; line-height:1.8;
+    transform: translateY(30px) scale(.95); transition: transform .6s;
+  }
+  .letter-modal.open .letter-paper{ transform: translateY(0) scale(1); }
+  .letter-paper::-webkit-scrollbar{ width:4px; }
+  .letter-paper::-webkit-scrollbar-thumb{ background:#1a1f4b; border-radius:2px; }
+
+  /* Section divider */
+  .divider{
+    height:1px; width: 80%; max-width: 280px; margin: 0 auto;
+    background: linear-gradient(90deg, transparent, rgba(245,240,232,0.3), transparent);
+  }
+
+  /* Lightbox */
+  .lightbox{
+    position:fixed; inset:0; z-index:60; background: rgba(0,0,0,0.92); backdrop-filter: blur(20px);
+    display:flex; align-items:center; justify-content:center; padding:20px;
+    opacity:0; pointer-events:none; transition: opacity .4s;
+  }
+  .lightbox.open{ opacity:1; pointer-events:auto; }
+  .lightbox-img{
+    width: min(440px, 90vw); aspect-ratio: 1/1;
+    background: #f5f0e8; padding:14px 14px 56px 14px;
+    transform: scale(.9); transition: transform .5s;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+  }
+  .lightbox.open .lightbox-img{ transform: scale(1); }
+
+  /* Hero title reveal */
+  @keyframes heroIn{
+    0%{ opacity:0; letter-spacing: -0.05em; filter: blur(10px); transform: translateY(20px); }
+    100%{ opacity:1; letter-spacing: 0.02em; filter: blur(0); transform: translateY(0); }
+  }
+  .hero-in{ animation: heroIn 1.8s cubic-bezier(.2,.8,.2,1) forwards; }
+
+  /* Fade screen */
+  .screen{ transition: opacity 1s ease, visibility 1s; }
+  .screen.hidden-screen{ opacity:0; visibility:hidden; position:absolute; pointer-events:none; }
+
+  /* Card hover glow */
+  .card-glow{ position:relative; transition: transform .5s, box-shadow .5s; }
+  .card-glow::before{
+    content:''; position:absolute; inset:-1px; border-radius: inherit;
+    background: linear-gradient(135deg, rgba(180,200,255,0), rgba(180,200,255,0));
+    transition: background .5s; z-index:-1; filter: blur(20px);
+  }
+  .card-glow:hover::before{
+    background: linear-gradient(135deg, rgba(180,200,255,0.2), rgba(120,140,220,0.15));
+  }
+  .card-glow:hover{ transform: translateY(-6px); box-shadow: 0 20px 60px rgba(120,140,220,0.2); }
+
+  /* Memory card */
+  .mem-card{
+    position:relative; overflow:hidden;
+  }
+  .mem-card::after{
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(circle at 50% 0%, rgba(180,200,255,0.15), transparent 60%);
+    pointer-events:none;
+  }
+
+  /* Final big text reveal */
+  .final-reveal{
+    opacity:0; transform: translateY(30px); transition: all 1.5s cubic-bezier(.2,.8,.2,1);
+  }
+  .final-reveal.in{ opacity:1; transform: translateY(0); }
+
+  /* Cursor trail */
+  .cursor-glow{
+    position:fixed; width: 300px; height: 300px; border-radius:50%;
+    background: radial-gradient(circle, rgba(120,140,220,0.08), transparent 60%);
+    pointer-events:none; z-index:1;
+    transform: translate(-50%,-50%);
+    transition: transform .15s ease-out;
+  }
+
+  /* Hide scrollbar for horizontal gallery if any */
+  .no-scrollbar::-webkit-scrollbar{ display:none; }
+  .no-scrollbar{ scrollbar-width: none; }
+
+</style>
+</head>
+<body class="bg-black text-[#f5f0e8] relative">
+
+<!-- Starfield -->
+<canvas id="starCanvas"></canvas>
+
+<!-- Ambient orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- Cursor glow -->
+<div class="cursor-glow hidden md:block" id="cursorGlow"></div>
+
+<!-- ============================================== -->
+<!-- SECTION 1: LOADING SCREEN -->
+<!-- ============================================== -->
+<div id="loadingScreen" class="screen fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black">
+  <div class="text-center parallax-wrap" data-depth="0.02">
+    <div class="mb-8 flex justify-center">
+      <div class="w-16 h-16 rounded-full border border-[#f5f0e8]/20 relative flex items-center justify-center load-pulse">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#f5f0e8]/40 to-[#2c3a8c]/60 blur-sm"></div>
+      </div>
+    </div>
+    <p class="font-serif-lux text-2xl md:text-3xl text-[#f5f0e8]/80 tracking-wide load-pulse" style="animation-delay:.3s">
+      Preparing something special...
+    </p>
+    <div class="mt-10 w-64 md:w-80 mx-auto">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <p class="mt-3 text-xs tracking-[0.3em] text-[#f5f0e8]/40 font-light">
+        <span id="progressText">0</span>%
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================== -->
+<!-- SECTION 2: WELCOME -->
+<!-- ============================================== -->
+<div id="welcomeScreen" class="screen hidden-screen relative z-10 min-h-screen flex items-center justify-center px-6">
+  <div class="text-center max-w-3xl parallax-wrap" data-depth="0.03">
+    <p class="font-script text-3xl md:text-4xl text-[#f5f0e8]/60 mb-4 hero-in" style="animation-delay:.2s">for you</p>
+    <h1 class="font-serif-lux text-6xl md:text-8xl lg:text-9xl font-light tracking-wide glow-text hero-in" style="animation-delay:.5s">
+      Hai Isan <span class="inline-block animate-pulse">🤍</span>
+    </h1>
+    <div class="mt-8 h-px w-24 mx-auto bg-gradient-to-r from-transparent via-[#f5f0e8]/40 to-transparent hero-in" style="animation-delay:1s"></div>
+    <p class="mt-8 font-serif-lux italic text-lg md:text-xl text-[#f5f0e8]/70 hero-in" style="animation-delay:1.2s">
+      Aku punya sesuatu untuk sayang...
+    </p>
+    <button id="openMsgBtn" class="btn-lux mt-12 px-10 py-4 rounded-full font-serif-lux text-lg tracking-widest uppercase hero-in cursor-pointer" style="animation-delay:1.6s">
+      Buka Pesan
+    </button>
+    <p class="mt-16 text-xs tracking-[0.4em] text-[#f5f0e8]/30 hero-in" style="animation-delay:2s">
+      SCROLL / TAP TO BEGIN
+    </p>
+  </div>
+</div>
+
+<!-- ============================================== -->
+<!-- MAIN CONTENT -->
+<!-- ============================================== -->
+<main id="mainContent" class="screen hidden-screen relative z-10">
+
+  <!-- SECTION 3: STORY TIMELINE -->
+  <section class="relative py-24 md:py-36 px-6">
+    <div class="max-w-5xl mx-auto text-center mb-20">
+      <p class="reveal font-script text-2xl md:text-3xl text-[#f5f0e8]/60">our story</p>
+      <h2 class="reveal font-serif-lux text-4xl md:text-6xl font-light mt-2 glow-soft">Perjalanan Kita</h2>
+      <div class="reveal mt-6 divider"></div>
+    </div>
+
+    <div class="relative max-w-4xl mx-auto">
+      <div class="timeline-line"></div>
+
+      <!-- Card 1 -->
+      <div class="relative mb-16 md:mb-24 flex md:justify-start">
+        <div class="timeline-dot"></div>
+        <div class="reveal-left ml-14 md:ml-0 md:w-5/12">
+          <div class="glass-strong card-glow rounded-2xl p-7">
+            <p class="font-script text-xl text-[#f5f0e8]/60">01</p>
+            <h3 class="font-serif-lux text-2xl md:text-3xl mt-2 glow-soft">Kita Awalnya Temenan</h3>
+            <p class="mt-4 text-[#f5f0e8]/70 font-light leading-relaxed">Awalnya cuma teman biasa.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="relative mb-16 md:mb-24 flex md:justify-end">
+        <div class="timeline-dot"></div>
+        <div class="reveal-right ml-14 md:ml-0 md:w-5/12">
+          <div class="glass-strong card-glow rounded-2xl p-7">
+            <p class="font-script text-xl text-[#f5f0e8]/60">02</p>
+            <h3 class="font-serif-lux text-2xl md:text-3xl mt-2 glow-soft">Aku Terus Ngejar Kamu</h3>
+            <p class="mt-4 text-[#f5f0e8]/70 font-light leading-relaxed">Aku terus mencoba mendekat walaupun waktu itu belum berhasil.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="relative mb-16 md:mb-24 flex md:justify-start">
+        <div class="timeline-dot"></div>
+        <div class="reveal-left ml-14 md:ml-0 md:w-5/12">
+          <div class="glass-strong card-glow rounded-2xl p-7">
+            <p class="font-script text-xl text-[#f5f0e8]/60">03</p>
+            <h3 class="font-serif-lux text-2xl md:text-3xl mt-2 glow-soft">Kita Sempat Asing</h3>
+            <p class="mt-4 text-[#f5f0e8]/70 font-light leading-relaxed">Ada masa ketika kita berhenti berbicara dan saling menjauh.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="relative mb-16 md:mb-24 flex md:justify-end">
+        <div class="timeline-dot"></div>
+        <div class="reveal-right ml-14 md:ml-0 md:w-5/12">
+          <div class="glass-strong card-glow rounded-2xl p-7">
+            <p class="font-script text-xl text-[#f5f0e8]/60">04</p>
+            <h3 class="font-serif-lux text-2xl md:text-3xl mt-2 glow-soft">Aku Memberanikan Diri Chat Lagi</h3>
+            <p class="mt-4 text-[#f5f0e8]/70 font-light leading-relaxed">Dan ternyata keputusan itu membawa kita ke cerita yang jauh lebih indah.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="relative flex md:justify-start">
+        <div class="timeline-dot"></div>
+        <div class="reveal-left ml-14 md:ml-0 md:w-5/12">
+          <div class="glass-strong card-glow rounded-2xl p-7">
+            <p class="font-script text-xl text-[#f5f0e8]/60">05</p>
+            <h3 class="font-serif-lux text-2xl md:text-3xl mt-2 glow-soft">Hampir Setahun Bersama</h3>
+            <p class="mt-4 text-[#f5f0e8]/70 font-light leading-relaxed">Sekarang kita punya banyak cerita dan kenangan yang ga akan aku lupakan.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 4: PHOTO GALLERY -->
+  <section class="relative py-24 md:py-36 px-6">
+    <div class="max-w-5xl mx-auto text-center mb-20">
+      <p class="reveal font-script text-2xl md:text-3xl text-[#f5f0e8]/60">memories</p>
+      <h2 class="reveal font-serif-lux text-4xl md:text-6xl font-light mt-2 glow-soft">Momen Kita</h2>
+      <div class="reveal mt-6 divider"></div>
+    </div>
+
+    <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 md:gap-16 items-center justify-items-center">
+      <!-- Polaroid 1 -->
+      <div class="reveal-pop float-slow" data-delay="100">
+        <div class="polaroid rotate-[-4deg] cursor-pointer" data-polaroid="1">
+          <div class="polaroid-img">
+            <img src="foto1.jpeg" alt="Memory 1" class="w-full h-full object-cover">
+          </div>
+          <p class="polaroid-caption">our first chapter</p>
+        </div>
+      </div>
+      
+      <!-- Polaroid 2 -->
+      <div class="reveal-pop float-slow-2" data-delay="300">
+        <div class="polaroid rotate-[4deg] cursor-pointer" data-polaroid="2">
+          <div class="polaroid-img">
+            <img src="foto2.jpeg" alt="Memory 2" class="w-full h-full object-cover">
+          </div>
+          <p class="polaroid-caption">you & me</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: THINGS I LOVE ABOUT YOU -->
+  <section class="relative py-24 md:py-36 px-6">
+    <div class="max-w-5xl mx-auto text-center mb-20">
+      <p class="reveal font-script text-2xl md:text-3xl text-[#f5f0e8]/60">little things</p>
+      <h2 class="reveal font-serif-lux text-4xl md:text-6xl font-light mt-2 glow-soft">Yang Aku Suka Dari Kamu</h2>
+      <div class="reveal mt-6 divider"></div>
+    </div>
+
+    <div class="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+      <div class="reveal-pop float-slow" data-delay="100">
+        <div class="glass-strong card-glow rounded-2xl p-7 h-full">
+          <div class="text-4xl mb-4">🎬</div>
+          <h3 class="font-serif-lux text-xl md:text-2xl glow-soft">Suka Film Donghua</h3>
+          <div class="mt-4 h-px w-12 bg-gradient-to-r from-[#f5f0e8]/40 to-transparent"></div>
+        </div>
+      </div>
+      <div class="reveal-pop float-slow-2" data-delay="250">
+        <div class="glass-strong card-glow rounded-2xl p-7 h-full">
+          <div class="text-4xl mb-4">🎮</div>
+          <h3 class="font-serif-lux text-xl md:text-2xl glow-soft">Suka Main Valorant</h3>
+          <div class="mt-4 h-px w-12 bg-gradient-to-r from-[#f5f0e8]/40 to-transparent"></div>
+        </div>
+      </div>
+      <div class="reveal-pop float-slow-3" data-delay="400">
+        <div class="glass-strong card-glow rounded-2xl p-7 h-full">
+          <div class="text-4xl mb-4">📸</div>
+          <h3 class="font-serif-lux text-xl md:text-2xl glow-soft">Suka Kalau Aku Tiba-Tiba Kirim Pap</h3>
+          <div class="mt-4 h-px w-12 bg-gradient-to-r from-[#f5f0e8]/40 to-transparent"></div>
+        </div>
+      </div>
+      <div class="reveal-pop float-slow" data-delay="550">
+        <div class="glass-strong card-glow rounded-2xl p-7 h-full">
+          <div class="text-4xl mb-4">🤍</div>
+          <h3 class="font-serif-lux text-xl md:text-2xl glow-soft">Dan Kayanya Dia Suka Aku 😭🤍</h3>
+          <div class="mt-4 h-px w-12 bg-gradient-to-r from-[#f5f0e8]/40 to-transparent"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: SPECIAL LETTER -->
+  <section class="relative py-24 md:py-36 px-6">
+    <div class="max-w-5xl mx-auto text-center mb-16">
+      <p class="reveal font-script text-2xl md:text-3xl text-[#f5f0e8]/60">a letter</p>
+      <h2 class="reveal font-serif-lux text-4xl md:text-6xl font-light mt-2 glow-soft">Surat Untukmu</h2>
+      <div class="reveal mt-6 divider"></div>
+      <p class="reveal mt-6 text-[#f5f0e8]/60 italic font-serif-lux">tap the envelope, sayang...</p>
+    </div>
+
+    <div class="reveal-pop flex justify-center envelope-wrap" data-delay="200">
+      <div class="envelope float-slow cursor-pointer" id="envelope">
+        <div class="envelope-body"></div>
+        <div class="letter" id="envLetterMini">
+          <p class="font-script text-lg text-center leading-tight">hai sayangku isan 🤍</p>
+          <p class="mt-2 text-[0.65rem] leading-relaxed text-center">tap to open...</p>
+        </div>
+        <div class="envelope-front"></div>
+        <div class="envelope-flap"></div>
+        <div class="wax-seal">F</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: MEMORY MOMENTS -->
+  <section class="relative py-24 md:py-36 px-6">
+    <div class="max-w-5xl mx-auto text-center mb-20">
+      <p class="reveal font-script text-2xl md:text-3xl text-[#f5f0e8]/60">forever moments</p>
+      <h2 class="reveal font-serif-lux text-4xl md:text-6xl font-light mt-2 glow-soft">Hal Yang Ga Akan Aku Lupa</h2>
+      <div class="reveal mt-6 divider"></div>
+    </div>
+
+    <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-6 md:gap-8">
+      <div class="reveal-left float-slow" data-delay="100">
+        <div class="glass-strong mem-card card-glow rounded-2xl p-8 h-full">
+          <div class="text-5xl mb-6">💫</div>
+          <h3 class="font-serif-lux text-2xl md:text-3xl glow-soft leading-tight">Kamu Selalu Mengusahakan Aku</h3>
+          <div class="mt-6 h-px w-16 bg-gradient-to-r from-[#f5f0e8]/40 to-transparent"></div>
+        </div>
+      </div>
+      <div class="reveal float-slow-2" data-delay="250">
+        <div class="glass-strong mem-card card-glow rounded-2xl p-8 h-full">
+          <div class="text-5xl mb-6">😵‍💫</div>
+          <h3 class="font-serif-lux text-2xl md:text-3xl glow-soft leading-tight">Aku Selalu Salting Kalau Lihat Kamu 😵‍💫</h3>
+          <div class="mt-6 h-px w-16 bg-gradient-to-r from-[#f5f0e8]/40 to-transparent"></div>
+        </div>
+      </div>
+      <div class="reveal-right float-slow-3" data-delay="400">
+        <div class="glass-strong mem-card card-glow rounded-2xl p-8 h-full">
+          <div class="text-5xl mb-6">🤍</div>
+          <h3 class="font-serif-lux text-2xl md:text-3xl glow-soft leading-tight">Terima Kasih Karena Selalu Ada</h3>
+          <div class="mt-6 h-px w-16 bg-gradient-to-r from-[#f5f0e8]/40 to-transparent"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8: FINAL MESSAGE -->
+  <section class="relative py-32 md:py-48 px-6 overflow-hidden">
+    <!-- extra star glow bg -->
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0e27]/30 to-black pointer-events-none"></div>
+
+    <div class="relative max-w-4xl mx-auto text-center">
+      <p class="final-reveal font-script text-3xl md:text-4xl text-[#f5f0e8]/70 mb-8">forever yours</p>
+
+      <h2 id="finalText1" class="final-reveal font-serif-lux text-3xl md:text-5xl lg:text-6xl font-light leading-tight glow-text">
+        Kalau suatu hari sayang lagi cape, sedih, atau ngerasa sendiri...
+      </h2>
+
+      <div id="finalDivider" class="final-reveal mt-12 mb-12 h-px w-32 mx-auto bg-gradient-to-r from-transparent via-[#f5f0e8]/50 to-transparent"></div>
+
+      <p id="finalText2" class="final-reveal font-serif-lux italic text-2xl md:text-4xl lg:text-5xl font-light leading-snug glow-soft">
+        Semoga halaman ini bisa ngingetin kalau ada aku yang selalu sayang sama sayang 🤍
+      </p>
+
+      <div class="mt-20">
+        <p id="finalSign" class="final-reveal font-script text-5xl md:text-7xl glow-text">
+          Love You Sedunia 🤍
+        </p>
+        <p class="final-reveal mt-6 text-xs tracking-[0.4em] text-[#f5f0e8]/40">— FOR M. FAIZ IKHSAN AULIA —</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="relative py-10 text-center text-xs tracking-[0.3em] text-[#f5f0e8]/30">
+    webdev by <a href="https://www.fahmiwirp.my.id/">@fahmiwirp</a>
+  </footer>
+</main>
+
+<!-- Letter modal (shown after envelope opens) -->
+<div class="letter-modal" id="letterModal">
+  <div class="letter-paper">
+    <p class="font-script text-3xl md:text-4xl text-center mb-6">hai sayangku isan 🤍</p>
+    <div id="letterContent" class="space-y-4"></div>
+    <p class="mt-8 text-right font-script text-2xl">— from me, forever yours 🤍</p>
+    <div class="mt-10 text-center">
+      <button id="closeLetterBtn" class="btn-lux px-8 py-3 rounded-full text-sm tracking-widest uppercase cursor-pointer">Tutup Surat</button>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-img">
+    <div class="polaroid-img">
+      <div class="relative z-10 text-center px-4">
+        <p class="font-script text-5xl text-[#f5f0e8]/80" id="lightboxTitle">us</p>
+        <p class="text-xs tracking-[0.3em] text-[#f5f0e8]/40 mt-2">MEMORY</p>
+      </div>
+    </div>
+    <p class="polaroid-caption" id="lightboxCaption">memory</p>
+  </div>
+</div>
+
+<!-- Music player -->
+<div class="music-player" id="musicPlayer">
+  <div class="music-expand glass-strong rounded-2xl">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="wave paused" id="wave"><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-serif-lux truncate">Risk Is All</p>
+        <p class="text-[0.65rem] text-[#f5f0e8]/50 truncate">for Isan 🤍</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button class="music-ctrl-btn flex-1 btn-lux rounded-full py-2 text-xs tracking-widest cursor-pointer" id="playPauseBtn">PLAY</button>
+    </div>
+    <p class="text-[0.6rem] text-[#f5f0e8]/40 mt-3 text-center">♪ background music</p>
+  </div>
+  <div class="music-btn" id="musicToggle">
+    <div class="disc" id="disc"></div>
+  </div>
+</div>
+
+<!-- Audio (using a placeholder URL — replace src with your actual music file) -->
+<audio id="bgAudio" loop preload="none">
+  <source src="Bruno Mars - Risk It All - LatinHype.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* ========================================================
+   STARFIELD
+======================================================== */
+(function(){
+  const canvas = document.getElementById('starCanvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [], shooting = [];
+  let w, h;
+
+  function resize(){
+    w = canvas.width = window.innerWidth * devicePixelRatio;
+    h = canvas.height = window.innerHeight * devicePixelRatio;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    initStars();
+  }
+  function initStars(){
+    stars = [];
+    const count = Math.floor((window.innerWidth * window.innerHeight) / 4000);
+    for(let i=0;i<count;i++){
+      stars.push({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        r: Math.random()*1.2*devicePixelRatio + 0.2,
+        a: Math.random()*0.8 + 0.2,
+        s: Math.random()*0.02 + 0.005,
+        d: Math.random() > 0.5 ? 1 : -1
+      });
+    }
+  }
+  function maybeShoot(){
+    if(Math.random() < 0.004){
+      shooting.push({
+        x: Math.random()*w, y: Math.random()*h*0.5,
+        vx: (3 + Math.random()*3)*devicePixelRatio,
+        vy: (1 + Math.random()*1.5)*devicePixelRatio,
+        life: 1
+      });
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    // stars
+    for(const s of stars){
+      s.a += s.s * s.d;
+      if(s.a > 1){ s.a = 1; s.d = -1; }
+      if(s.a < 0.1){ s.a = 0.1; s.d = 1; }
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(245,240,232,${s.a})`;
+      ctx.shadowBlur = 8 * devicePixelRatio;
+      ctx.shadowColor = 'rgba(180,200,255,0.6)';
+      ctx.fill();
+    }
+    ctx.shadowBlur = 0;
+    // shooting stars
+    maybeShoot();
+    for(let i=shooting.length-1;i>=0;i--){
+      const sh = shooting[i];
+      const grad = ctx.createLinearGradient(sh.x, sh.y, sh.x - sh.vx*12, sh.y - sh.vy*12);
+      grad.addColorStop(0, `rgba(245,240,232,${sh.life})`);
+      grad.addColorStop(1, 'rgba(245,240,232,0)');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.5*devicePixelRatio;
+      ctx.beginPath();
+      ctx.moveTo(sh.x, sh.y);
+      ctx.lineTo(sh.x - sh.vx*12, sh.y - sh.vy*12);
+      ctx.stroke();
+      sh.x += sh.vx; sh.y += sh.vy;
+      sh.life -= 0.012;
+      if(sh.life <= 0 || sh.x > w || sh.y > h) shooting.splice(i,1);
+    }
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
+})();
+
+/* ========================================================
+   LOADING
+======================================================== */
+(function(){
+  const fill = document.getElementById('progressFill');
+  const text = document.getElementById('progressText');
+  const loading = document.getElementById('loadingScreen');
+  const welcome = document.getElementById('welcomeScreen');
+  let p = 0;
+  const iv = setInterval(()=>{
+    p += Math.random()*6 + 2;
+    if(p >= 100){ p = 100; clearInterval(iv); finish(); }
+    fill.style.width = p + '%';
+    text.textContent = Math.floor(p);
+  }, 120);
+  function finish(){
+    setTimeout(()=>{
+      loading.classList.add('hidden-screen');
+      welcome.classList.remove('hidden-screen');
+    }, 600);
+  }
+})();
+
+/* ========================================================
+   WELCOME -> MAIN TRANSITION
+======================================================== */
+document.getElementById('openMsgBtn').addEventListener('click', function(e){
+  createRipple(e, this);
+  const welcome = document.getElementById('welcomeScreen');
+  const main = document.getElementById('mainContent');
+  welcome.classList.add('hidden-screen');
+  setTimeout(()=>{
+    main.classList.remove('hidden-screen');
+    window.scrollTo({ top:0, behavior:'instant' });
+    startHearts();
+  }, 800);
+});
+
+/* ========================================================
+   BUTTON RIPPLE
+======================================================== */
+function createRipple(e, btn){
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  ripple.style.width = ripple.style.height = size + 'px';
+  ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+  ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+  btn.appendChild(ripple);
+  setTimeout(()=> ripple.remove(), 800);
+}
+document.querySelectorAll('.btn-lux').forEach(b=>{
+  b.addEventListener('click', e=> createRipple(e, b));
+});
+
+/* ========================================================
+   INTERSECTION OBSERVER (scroll reveal)
+======================================================== */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){
+      const d = parseInt(en.target.dataset.delay || '0');
+      setTimeout(()=> en.target.classList.add('in'), d);
+      io.unobserve(en.target);
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal, .reveal-pop, .reveal-left, .reveal-right, .final-reveal').forEach(el=> io.observe(el));
+
+/* ========================================================
+   CURSOR GLOW / PARALLAX
+======================================================== */
+const cursorGlow = document.getElementById('cursorGlow');
+let mx = window.innerWidth/2, my = window.innerHeight/2;
+window.addEventListener('mousemove', (e)=>{
+  mx = e.clientX; my = e.clientY;
+  if(cursorGlow){
+    cursorGlow.style.left = mx + 'px';
+    cursorGlow.style.top = my + 'px';
+  }
+  // parallax
+  document.querySelectorAll('.parallax-wrap').forEach(el=>{
+    const depth = parseFloat(el.dataset.depth || '0.02');
+    const cx = window.innerWidth/2, cy = window.innerHeight/2;
+    const dx = (mx - cx) * depth;
+    const dy = (my - cy) * depth;
+    el.style.transform = `translate(${dx}px, ${dy}px)`;
+  });
+});
+
+/* ========================================================
+   FLOATING HEARTS
+======================================================== */
+let heartsRunning = false;
+function startHearts(){
+  if(heartsRunning) return;
+  heartsRunning = true;
+  setInterval(()=>{
+    if(document.hidden) return;
+    const h = document.createElement('div');
+    h.className = 'heart-float';
+    const symbols = ['🤍','🤍','✨','🤍'];
+    h.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+    h.style.left = (Math.random()*100) + 'vw';
+    h.style.fontSize = (0.8 + Math.random()*1.2) + 'rem';
+    h.style.animationDuration = (8 + Math.random()*8) + 's';
+    h.style.opacity = (0.3 + Math.random()*0.5);
+    document.body.appendChild(h);
+    setTimeout(()=> h.remove(), 18000);
+  }, 1500);
+}
+
+/* ========================================================
+   ENVELOPE & LETTER
+======================================================== */
+const envelope = document.getElementById('envelope');
+const letterModal = document.getElementById('letterModal');
+const letterContent = document.getElementById('letterContent');
+const closeLetterBtn = document.getElementById('closeLetterBtn');
+
+const letterParagraphs = [
+  "hai sayangku isan 🤍",
+  "sebenernya aku ga terlalu pinter ngerangkai kata-kata, makanya bikin ini aja udah mikir lama banget 😭",
+  "aku cuma mau bilang makasih ya udah hadir di hidup aku. makasih karena udah bertahan sejauh ini, makasih karena selalu ngusahain aku bahkan di saat itu ga mudah buat sayang sendiri.",
+  "kadang aku masih ga nyangka kita bisa sampai di titik ini. awalnya cuma temenan, terus aku yang ngejar-ngejar kamu, terus sempet asing juga beberapa bulan. waktu itu aku pikir mungkin cerita kita bakal selesai di situ.",
+  "tapi ternyata engga.",
+  "aku memberanikan diri buat chat lagi, kita mulai ngobrol lagi, mulai dekat lagi, dan sekarang kita punya cerita yang bahkan ga pernah aku bayangin sebelumnya.",
+  "aku seneng banget bisa punya kamu.",
+  "aku seneng karena kamu selalu jadi orang yang bisa bikin aku nyaman, bikin aku ketawa, bikin aku ngerasa diperhatiin, dan bikin hari-hari aku jauh lebih berwarna.",
+  "dan jujur aja, sampai sekarang aku masih suka salting sendiri kalau ngeliat kamu 😵‍💫",
+  "pokoknya terima kasih ya sayang, karena udah jadi bagian paling indah dari hari-hari aku.",
+  "love u sedunia 🤍"
+];
+
+let letterOpened = false;
+envelope.addEventListener('click', ()=>{
+  if(!letterOpened){
+    envelope.classList.add('open');
+    letterOpened = true;
+    setTimeout(()=>{
+      letterModal.classList.add('open');
+      typeLetter();
+    }, 1200);
+  } else {
+    letterModal.classList.add('open');
+    typeLetter();
+  }
+});
+
+function typeLetter(){
+  letterContent.innerHTML = '';
+  let pi = 0;
+  function next(){
+    if(pi >= letterParagraphs.length) return;
+    const p = document.createElement('p');
+    p.className = 'leading-relaxed';
+    p.innerHTML = '<span class="typed"></span><span class="caret"></span>';
+    letterContent.appendChild(p);
+    const span = p.querySelector('.typed');
+    const caret = p.querySelector('.caret');
+    const txt = letterParagraphs[pi];
+    let ci = 0;
+    const speed = 18;
+    function typeChar(){
+      if(ci < txt.length){
+        span.textContent += txt[ci];
+        ci++;
+        letterModal.querySelector('.letter-paper').scrollTop = letterModal.querySelector('.letter-paper').scrollHeight;
+        setTimeout(typeChar, speed + Math.random()*25);
+      } else {
+        caret.remove();
+        pi++;
+        setTimeout(next, 250);
+      }
+    }
+    typeChar();
+  }
+  next();
+}
+
+closeLetterBtn.addEventListener('click', (e)=>{
+  createRipple(e, closeLetterBtn);
+  letterModal.classList.remove('open');
+});
+
+letterModal.addEventListener('click', (e)=>{
+  if(e.target === letterModal){
+    letterModal.classList.remove('open');
+  }
+});
+
+/* ========================================================
+   LIGHTBOX (polaroid click)
+======================================================== */
+const lightbox = document.getElementById('lightbox');
+const lbCaption = document.getElementById('lightboxCaption');
+
+document.querySelectorAll('.polaroid').forEach(pol=>{
+  pol.addEventListener('click', ()=>{
+    const id = pol.dataset.polaroid;
+    const polaroidImg = lightbox.querySelector('.polaroid-img');
+    
+    // Ganti isi polaroid di lightbox (pakai .jpeg sesuai nama file asli)
+    if(id === '1'){ 
+      polaroidImg.innerHTML = '<img src="foto1.jpeg" alt="Memory 1" style="width:100%;height:100%;object-fit:cover; position:relative; z-index:10;">';
+      lbCaption.textContent = 'our first chapter'; 
+    } else { 
+      polaroidImg.innerHTML = '<img src="foto2.jpeg" alt="Memory 2" style="width:100%;height:100%;object-fit:cover; position:relative; z-index:10;">';
+      lbCaption.textContent = 'you & me'; 
+    }
+    
+    lightbox.classList.add('open');
+  });
+});
+
+lightbox.addEventListener('click', ()=> lightbox.classList.remove('open'));
+/* ========================================================
+   TILT ON POLAROID (mouse)
+======================================================== */
+document.querySelectorAll('.polaroid').forEach(pol=>{
+  pol.addEventListener('mousemove', (e)=>{
+    const rect = pol.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    pol.style.transform = `perspective(800px) rotateY(${x*10}deg) rotateX(${-y*10}deg) scale(1.04)`;
+  });
+  pol.addEventListener('mouseleave', ()=>{
+    pol.style.transform = '';
+  });
+});
+
+/* ========================================================
+   MUSIC PLAYER
+======================================================== */
+const musicPlayer = document.getElementById('musicPlayer');
+const musicToggle = document.getElementById('musicToggle');
+const playPauseBtn = document.getElementById('playPauseBtn');
+const wave = document.getElementById('wave');
+const disc = document.getElementById('disc');
+const audio = document.getElementById('bgAudio');
+audio.volume = 0.4;
+
+musicToggle.addEventListener('click', ()=>{
+  musicPlayer.classList.toggle('open');
+});
+
+playPauseBtn.addEventListener('click', (e)=>{
+  createRipple(e, playPauseBtn);
+  if(audio.paused){
+    audio.play().then(()=>{
+      wave.classList.remove('paused');
+      musicToggle.classList.add('playing');
+      playPauseBtn.textContent = 'PAUSE';
+    }).catch(()=>{
+      playPauseBtn.textContent = 'NO AUDIO';
+      setTimeout(()=> playPauseBtn.textContent = 'PLAY', 1500);
+    });
+  } else {
+    audio.pause();
+    wave.classList.add('paused');
+    musicToggle.classList.remove('playing');
+    playPauseBtn.textContent = 'PLAY';
+  }
+});
+
+/* ========================================================
+   SMOOTH SCROLL POLYFILL (native is fine, but ensure nice)
+======================================================== */
+document.documentElement.style.scrollBehavior = 'smooth';
+
+/* ========================================================
+   KEYBOARD: ESC to close modals
+======================================================== */
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape'){
+    letterModal.classList.remove('open');
+    lightbox.classList.remove('open');
+  }
+});
+
+</script>
+</body>
+</html>
